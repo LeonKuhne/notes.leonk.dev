@@ -1,0 +1,45 @@
+body {
+  background-image: url("https://random.imagecdn.app/v1/image?width=500&height=500");
+}
+
+#content {
+  display: flex;
+  width: 50%;
+  margin: auto;
+  flex-direction: column;
+  color: white;
+}
+
+#content input {
+  flex: 1;
+  font-size: 35px; 
+}
+
+#content img {
+  margin: auto;
+  width: 520px;
+}
+
+.question {
+  flex: 1;
+  background-color: black;
+  font-size: 16px; 
+}
+
+@media only screen and (max-width: 1000px) {
+  #content {
+    width: 75%;
+  }
+  #content img {
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  #content {
+    width: 100%;
+  }
+  #content img {
+    width: 100%;
+  }
+}
