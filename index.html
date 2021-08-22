@@ -1,27 +1,121 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>fun</title>
-  <link rel="stylesheet" href="assets/css/styles.css">
-</head>
-<body>
-  <div id="content">
-    <h2>replicate.fun</h2>
-    <img
-      alt="plutchiks wheel" 
-      src="assets/images/plutchik.png"
-      style="mix-blend-mode: difference;">
-    
-    <span class="question">What is your goal?</span>
-    <input placeholder="be more optimistic">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>fun</title>
+    <link rel="stylesheet" href="assets/css/styles.css" />
+    <script src="assets/js/script.js" type="text/javascript"></script>
+    <script src="assets/js/storage.js" type="text/javascript"></script>
+    <script src="assets/js/time-since.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div id="content">
+      <h2>replicate.fun</h2>
+      <img
+        alt="plutchiks wheel"
+        src="assets/images/plutchik.png"
+      />
 
-    <span class="question">How are you now?</span>
-    <input placeholder="disapproval">
+      <span class="question">What is your goal?</span>
+      <input placeholder="be more optimistic" />
+
+      <span class="question">How are you now?</span>
+      <input placeholder="disapproval" />
+
+      <span class="question">How can you get there?</span>
+      <input />
+
+    </div>
     
-    <span class="question">How can you get there?</span>
-    <input>
-  </div>
-</body>
+    <hr />
+
+    <table id="history">
+      <h3>History</h3>
+    </table>
+
+    <script>
+      "use strict";
+      const TABLE_PLUTCHIK = `rf-plutchik`;
+
+      // collect answers
+      const inputs = document.getElementsByTagName("input");
+      filter(inputs, (idx, input) => {
+        input.addEventListener("keyup", (event) => {
+          // enter key
+          if (event.keyCode === 13) {
+            event.preventDefault();
+
+            // update state
+            let timestamp = new Date().toISOString();
+            saveItem(TABLE_PLUTCHIK, timestamp, filter(inputs, (_, x) => x.value));
+            updateHistoryView()
+
+            filter(inputs, (_, x) => (x.style.backgroundColor = "#CFCA"));
+          } else {
+            filter(inputs, (_, x) => (x.style.backgroundColor = "#FFF"));
+          }
+        });
+      });
+
+      // show history
+      const updateHistoryView = () => {
+        // download everything from localstorage
+        const history = getItems(TABLE_PLUTCHIK);
+        const questionElems = document.getElementsByClassName("question");
+        const table = document.getElementById("history");
+        table.innerHTML = "";
+
+        // header date & questions
+        const th = tag("th", {
+          children: [
+            tag("td", {
+              children: [
+                tag("div", { text: "Date" }),
+                ...filter(questionElems, (_, question) => tag("td", {
+                  children: [
+                    tag("div", { text: question.textContent }),
+                  ],
+                })),
+              ],
+            })
+          ]
+        });
+        table.appendChild(th);
+
+        // sort history and fill table
+        Object.entries(history)
+        .sort(([timeA], [timeB]) => new Date(timeA).getTime() < new Date(timeB).getTime())
+        .forEach(([timestamp, answers]) => {
+          const date = new Date(timestamp);
+          const tr = tag("tr", {
+            children: [
+              tag("td", {
+                children: [
+                  tag("div", { text: timeSince(date) }),
+                  ...filter(answers, (timestamp, answer) => tag("td", {
+                    children: [
+                      tag("div", { text: answer }),
+                    ],
+                  })),
+                ],
+              })
+            ]
+          });
+          table.appendChild(tr);
+
+          // delete action
+          tr.onclick = () => {
+            if (confirm(`Delete submission from ${date.toLocaleString()}?`)) {
+              deleteItem(TABLE_PLUTCHIK, timestamp);
+              updateHistoryView()
+            };
+          }
+        })
+      }
+
+      // refresh the view
+      setInterval(updateHistoryView, 1000);
+    </script>
+  </body>
 </html>

@@ -1,7 +1,12 @@
+html {
+  height: 100%;
+}
+
 body {
   background-color: black;
   background-image: url("/assets/images/default_bg.png");
   background-image: url("https://random.imagecdn.app/v1/image?width=500&height=500");
+  margin: 0px;
 }
 
 #content {
@@ -10,6 +15,7 @@ body {
   margin: auto;
   flex-direction: column;
   color: white;
+  max-width: 1500px;
 }
 
 #content input {
@@ -20,6 +26,7 @@ body {
 #content img {
   margin: auto;
   width: 520px;
+  mix-blend-mode: difference;
 }
 
 .question {
@@ -32,19 +39,47 @@ h3 {
   background: white;
   color: black;
   mix-blend-mode: difference;
+  padding: 0px 50px;
 }
-
 h3 + * {
   background: black;
   padding: 5px 20px;
   border-style: solid;
   border-width: 1px;
 }
-
 h3 + * > *:hover {
   background: white;
   color: black;
   cursor: cell;
+}
+
+table {
+  background: black;
+  color: white;
+  flex-direction: column;
+  padding: 0;
+  font-size: 20px;
+}
+table > th  {
+  background: white;
+  color: black;
+}
+table, table > th, table > tr, table > * > td {
+  display: flex;
+  flex: 1;
+}
+table > * > td > * {  
+  margin: auto;
+  padding: 20px 0px;
+}
+
+hr {
+  border-style: none;
+  margin: 100px 0px;
+  height: 50px;
+  width: 100vw;
+  background: white;
+  mix-blend-mode: difference;
 }
 
 @media only screen and (max-width: 1000px) {
