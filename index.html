@@ -30,13 +30,17 @@
     
     <hr />
 
-    <table id="history">
-      <h3>History</h3>
-    </table>
+    <table id="history" />
 
     <script>
       "use strict";
       const TABLE_PLUTCHIK = `rf-plutchik`;
+
+      // collect questions
+      const questions = () => filter(
+        document.getElementsByClassName("question"),
+        (_, questionElem) => questionElem.textContent
+      );
 
       // collect answers
       const inputs = document.getElementsByTagName("input");
@@ -49,7 +53,7 @@
             // update state
             let timestamp = new Date().toISOString();
             saveItem(TABLE_PLUTCHIK, timestamp, filter(inputs, (_, x) => x.value));
-            updateHistoryView()
+            updateHistoryView(document.getElementById("history"), questions());
 
             filter(inputs, (_, x) => (x.style.backgroundColor = "#CFCA"));
           } else {
@@ -59,63 +63,65 @@
       });
 
       // show history
-      const updateHistoryView = () => {
+      const updateHistoryView = (elem, questions) => {
         // download everything from localstorage
         const history = getItems(TABLE_PLUTCHIK);
         const questionElems = document.getElementsByClassName("question");
-        const table = document.getElementById("history");
-        table.innerHTML = "";
+        
+        // clear table
+        elem.innerHTML = "";
 
-        // header date & questions
-        const th = tag("th", {
-          children: [
-            tag("td", {
-              children: [
-                tag("div", { text: "Date" }),
-                ...filter(questionElems, (_, question) => tag("td", {
-                  children: [
-                    tag("div", { text: question.textContent }),
-                  ],
-                })),
-              ],
-            })
-          ]
-        });
-        table.appendChild(th);
+        // add header
+        elem.appendChild(
+          tag("h3", { text: "History" })
+        )
 
-        // sort history and fill table
-        Object.entries(history)
-        .sort(([timeA], [timeB]) => new Date(timeA).getTime() < new Date(timeB).getTime())
-        .forEach(([timestamp, answers]) => {
-          const date = new Date(timestamp);
-          const tr = tag("tr", {
-            children: [
-              tag("td", {
-                children: [
-                  tag("div", { text: timeSince(date) }),
-                  ...filter(answers, (timestamp, answer) => tag("td", {
-                    children: [
-                      tag("div", { text: answer }),
-                    ],
-                  })),
+        // assemble results table
+        elem.appendChild(
+          tag("tbody", { children: [
+
+            // headers
+            tag("tr", { children: [
+              tag("th", { children: [
+                tag("div", { text: "Date" })
+              ]}),
+              ...filter(questions, (_, question) => 
+                tag("th", { children: [
+                  tag("div", { text: question })
+                ]})
+              ),
+            ]}),
+
+            // answers
+            ...filter(Object.entries(history)
+            .sort(([timeA], [timeB]) => new Date(timeA).getTime() < new Date(timeB).getTime()),
+            (_, [timestamp, answers]) => 
+              tag("tr", { children: [
+                  tag("td", { children: [
+                    tag("div", { text: timeSince(new Date(timestamp)) }),
+                  ]}),
+                  ...filter(answers, (timestamp, answer) => tag("td", { children: [
+                    tag("div", { text: answer }),
+                  ]}))
                 ],
-              })
-            ]
-          });
-          table.appendChild(tr);
 
-          // delete action
-          tr.onclick = () => {
-            if (confirm(`Delete submission from ${date.toLocaleString()}?`)) {
-              deleteItem(TABLE_PLUTCHIK, timestamp);
-              updateHistoryView()
-            };
-          }
-        })
-      }
+                // actions
+                onclick: () => {
+                  if (confirm(`Delete submission from ${new Date(timestamp).toLocaleString()}?`)) {
+                    deleteItem(TABLE_PLUTCHIK, timestamp);
+                    updateHistoryView(elem, questions);
+                  }
+                }
+              })
+            )
+          ]})
+        );
+      };
 
       // refresh the view
-      setInterval(updateHistoryView, 1000);
+      setInterval(() => 
+        updateHistoryView(document.getElementById("history"), questions()),
+      1000);
     </script>
   </body>
 </html>

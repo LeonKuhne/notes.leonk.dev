@@ -54,21 +54,25 @@ h3 + * > *:hover {
 }
 
 table {
-  background: black;
-  color: white;
   flex-direction: column;
-  padding: 0;
+}
+tbody, table {
+  padding: 0px;
   font-size: 20px;
 }
-table > th  {
+th  {
   background: white;
   color: black;
 }
-table, table > th, table > tr, table > * > td {
+tr {
+  background: black;
+  color: white;
+}
+table, th, tr, td {
   display: flex;
   flex: 1;
 }
-table > * > td > * {  
+td > *, th > * {  
   margin: auto;
   padding: 20px 0px;
 }

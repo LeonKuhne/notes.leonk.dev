@@ -16,9 +16,9 @@ const tag = (name, options = {}) => {
       elem.appendChild(child);
     }
   };
-  for (let key in options.attrs) {
-    elem.setAttribute(key, attrs[key])
-  };
+  if (typeof options.onclick === 'function') {
+    elem.onclick = options.onclick;
+  }
 
   return elem;
 }
