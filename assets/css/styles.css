@@ -65,23 +65,24 @@ tbody, table {
   padding: 0px;
   font-size: 20px;
 }
-th  {
-  background: white;
-  color: black;
-}
-tr {
+th {
   background: black;
   color: white;
 }
+tr {
+  background: white;
+  color: black;
+}
+
 table, th, tr, td {
   display: flex;
   flex: 1;
 }
-td:first-of-type{
+td:first-of-type, th:first-of-type {
   white-space: nowrap;
   max-width: min-content;
 }
-td:last-of-type{
+td:last-of-type, th:last-of-type {
   flex: 2;
 }
 td > *, th > * {  
