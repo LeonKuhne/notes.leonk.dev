@@ -81,6 +81,9 @@ td:first-of-type{
   white-space: nowrap;
   max-width: min-content;
 }
+td:last-of-type{
+  flex: 2;
+}
 td > *, th > * {  
   margin: auto;
   padding: 20px 0px;
