@@ -62,7 +62,7 @@
             // update state
             let timestamp = new Date().toISOString();
             saveItem(TABLE_TODO, timestamp, filter(textElems, (_, x) => x.value));
-            updateHistoryView(document.getElementById("history"), questions());
+            updateHistoryView(TABLE_TODO, document.getElementById("history"), questions());
 
             // clear input
             filter(textElems, (_, x) => x.value = "");
@@ -74,12 +74,9 @@
       });
 
       // refresh the view
-      updateHistoryView(document.getElementById("history"), questions());
-      /*
       setInterval(() => 
-        updateHistoryView(document.getElementById("history"), questions()), 
+        updateHistoryView(TABLE_TODO, document.getElementById("history"), questions()), 
       1000);
-      */
     </script>
   </body>
 </html>
