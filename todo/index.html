@@ -33,7 +33,7 @@
 
     <script>
       "use strict";
-      const TABLE_MEMORY = `rf-memory`;
+      const TABLE_TODO = `rf-todo`;
       // collect answers and add scales to textareas
       let inputs = [
         ...document.getElementsByTagName("input"),
@@ -61,7 +61,7 @@
 
             // update state
             let timestamp = new Date().toISOString();
-            saveItem(TABLE_MEMORY, timestamp, filter(textElems, (_, x) => x.value));
+            saveItem(TABLE_TODO, timestamp, filter(textElems, (_, x) => x.value));
             updateHistoryView(document.getElementById("history"), questions());
 
             // clear input
