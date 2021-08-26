@@ -77,6 +77,10 @@ table, th, tr, td {
   display: flex;
   flex: 1;
 }
+td:first-of-type{
+  white-space: nowrap;
+  max-width: min-content;
+}
 td > *, th > * {  
   margin: auto;
   padding: 20px 0px;
