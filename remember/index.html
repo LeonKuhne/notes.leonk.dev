@@ -74,7 +74,7 @@
             // update state
             let timestamp = new Date().toISOString();
             saveItem(TABLE_MEMORY, timestamp, filter(textElems, (_, x) => x.value));
-            updateHistoryView(document.getElementById("history"), questions());
+            updateHistoryView(TABLE_MEMORY, document.getElementById("history"), questions());
 
             // clean input
             if (document.getElementById("clear").children[0].checked) {
@@ -98,7 +98,7 @@
 
       // refresh the view
       setInterval(() => 
-        updateHistoryView(document.getElementById("history"), questions()),
+        updateHistoryView(TABLE_MEMORY, document.getElementById("history"), questions()),
       1000);
     </script>
   </body>

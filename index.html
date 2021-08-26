@@ -111,7 +111,7 @@
                 onclick: () => {
                   if (confirm(`Delete submission from ${new Date(timestamp).toLocaleString()}?`)) {
                     deleteItem(TABLE_PLUTCHIK, timestamp);
-                    updateHistoryView(elem, questions);
+                    updateHistoryView(TABLE_PLUTCHIK, elem, questions);
                   }
                 }
               })
@@ -122,7 +122,7 @@
 
       // refresh the view
       setInterval(() => 
-        updateHistoryView(document.getElementById("history"), questions()),
+        updateHistoryView(TABLE_PLUTCHIK, document.getElementById("history"), questions()),
       1000);
     </script>
   </body>

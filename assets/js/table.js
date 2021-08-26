@@ -38,9 +38,9 @@ const questions = () => filter(
 );
 
 // show history
-const updateHistoryView = (elem, questions) => {
+const updateHistoryView = (table, elem, questions) => {
   // download everything from localstorage
-  const history = getItems(TABLE_MEMORY);
+  const history = getItems(table);
   
   // clear table
   elem.innerHTML = "";
@@ -53,7 +53,7 @@ const updateHistoryView = (elem, questions) => {
   // assemble results table
   elem.appendChild(Table(questions, history, timestamp => {
     if (confirm(`Delete submission from ${new Date(timestamp).toLocaleString()}?`)) {
-      deleteItem(TABLE_MEMORY, timestamp);
+      deleteItem(table, timestamp);
       updateHistoryView(elem, questions);
     }
   }));
