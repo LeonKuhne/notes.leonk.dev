@@ -82,7 +82,7 @@
                 filter(textElems, (_, x) => x.value = "");
               
             } else {
-              input.value = input.value.trim();
+              input.value = input.value.replace(/[\r\n]/g, "");
             }
 
             filter(textElems, (_, x) => {
