@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>E.T.</title>
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <script src="../assets/js/script.js" type="text/javascript"></script>
+    <script src="../assets/js/storage.js" type="text/javascript"></script>
+    <script src="../assets/js/time-since.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div id="content">
+      <h2>
+        <a href="/index.html">
+          replicate.fun/<strong>ET</strong>
+        </a>
+      </h2>
+ 
+      <span class="question">external</span>
+      <input placeholder="in car listening to reggae" />
+
+      <span class="question">internal</span>
+      <input placeholder="hungry and thirsty" />
+      
+      <span class="question">emotional</span>
+      <input placeholder="anxios and happy" />
+      
+      <span class="question">theoretical</span>
+      <input placeholder="get dunkin then start work early" />
+      
+      <span class="question">executional</span>
+      <input placeholder="get ready to leave, and smile" />
+
+    </div>
+    
+    <hr />
+
+    <table id="history" />
+
+    <script>
+      "use strict";
+      const TABLE = `rf-et`;
+
+      // collect questions
+      const questions = () => filter(
+        document.getElementsByClassName("question"),
+        (_, questionElem) => questionElem.textContent
+      );
+
+      // collect answers
+      const inputs = document.getElementsByTagName("input");
+      filter(inputs, (idx, input) => {
+        input.addEventListener("keyup", (event) => {
+          // enter key
+          if (event.keyCode === 13) {
+            event.preventDefault();
+
+            // update state
+            let timestamp = new Date().toISOString();
+            saveItem(TABLE, timestamp, filter(inputs, (_, x) => x.value));
+            updateHistoryView(document.getElementById("history"), questions());
+
+            filter(inputs, (_, x) => (x.style.backgroundColor = "#CFCA"));
+          } else {
+            filter(inputs, (_, x) => (x.style.backgroundColor = "#FFF"));
+          }
+        });
+      });
+
+      // show history
+      const updateHistoryView = (elem, questions) => {
+        // download everything from localstorage
+        const history = getItems(TABLE);
+        const questionElems = document.getElementsByClassName("question");
+        
+        // clear table
+        elem.innerHTML = "";
+
+        // add header
+        elem.appendChild(
+          tag("h3", { text: "History" })
+        )
+
+        // assemble results table
+        elem.appendChild(
+          tag("tbody", { children: [
+
+            // headers
+            tag("tr", { children: [
+              tag("th", { children: [
+                tag("div", { text: "Date" })
+              ]}),
+              ...filter(questions, (_, question) => 
+                tag("th", { children: [
+                  tag("div", { text: question })
+                ]})
+              ),
+            ]}),
+
+            // answers
+            ...filter(Object.entries(history)
+            .sort(([timeA], [timeB]) => new Date(timeA).getTime() < new Date(timeB).getTime()),
+            (_, [timestamp, answers]) => 
+              tag("tr", { children: [
+                  tag("td", { children: [
+                    tag("div", { text: timeSince(new Date(timestamp)) }),
+                  ]}),
+                  ...filter(answers, (timestamp, answer) => tag("td", { children: [
+                    tag("div", { text: answer }),
+                  ]}))
+                ],
+
+                // actions
+                onclick: () => {
+                  if (confirm(`Delete submission from ${new Date(timestamp).toLocaleString()}?`)) {
+                    deleteItem(TABLE, timestamp);
+                    updateHistoryView(TABLE, elem, questions);
+                  }
+                }
+              })
+            )
+          ]})
+        );
+      };
+
+      // refresh the view
+      setInterval(() => 
+        updateHistoryView(TABLE, document.getElementById("history"), questions()),
+      1000);
+    </script>
+  </body>
+</html>
