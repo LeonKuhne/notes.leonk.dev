@@ -27,7 +27,7 @@ const Table = (questions, history, onclick=()=>{}) => tag("tbody", { children: [
 
       // actions
       onclick: () => onclick(timestamp),
-  })
+    })
   )
 ]})
 
