@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Steps</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="look at me">
+<style>
+html, body {
+  width: 100%;
+}
+body {
+  margin: 0;
+  background: black;
+  color: #f70;
+  display: flex;
+}
+body div {
+  flex: 1;
+  padding: 5%;
+}
+textarea {
+  width: 100%;
+}
+h3 {
+  text-align: center;
+}
+</style>
+</head>
+<body>
+  <div>
+    <h3>Steps Forward</h3>
+    <textarea onkeydown="add()"></textarea>
+  </div>
+  <div>
+    <h3>Steps Back</h3>
+    <textarea onkeydown="add()"></textarea>
+  </div>
+  
+<script>
+const add = () => {
+  if (window.event.keyCode === 13) {
+    const text = window.event.target.value;
+    addElem(text, window.event.target);
+    window.event.target.value = '';
+  }
+}
+const addElem = (text, elem) => {
+  const div = document.createElement('div');
+  div.innerHTML = text;
+  elem.parentNode.appendChild(div);
+  div.onclick = () => {
+    elem.parentNode.removeChild(div);
+  }
+}
+</script>
+</body>
+</html>
